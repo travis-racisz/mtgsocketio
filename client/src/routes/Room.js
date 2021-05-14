@@ -7,7 +7,9 @@ import "../CSS/room.css"
 
 
 
-
+io.onAny("event", (e) => { 
+    console.log(e)
+})
 
 
 const Video = (props) => {

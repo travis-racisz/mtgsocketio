@@ -12,10 +12,12 @@ const socketToRoom = {};
 
 io.on('connection', socket => {
     socket.on("join room", roomID => {
+        console.log("joined room")
         if (users[roomID]) {
             const length = users[roomID].length;
             if (length === 4) {
                 socket.emit("room full");
+                console.log("room full")
                 return;
             }
             users[roomID].push(socket.id);

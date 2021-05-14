@@ -1,0 +1,9 @@
+.card-title{ 
+    border: none;
+    background-color: white;
+}
+
+.card-title:hover{ 
+    border: 1px solid aqua;
+    background-color: aqua;
+}

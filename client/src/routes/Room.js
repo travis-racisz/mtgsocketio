@@ -44,6 +44,7 @@ const Room = (props) => {
             socketRef.current.emit("join room", roomID)
             console.log('joined room')
             socketRef.current.on("all users", users => {
+                console.log(users)
                 const peers = []
                 users.forEach(userID => {
                     const peer = createPeer(userID, socketRef.current.id, stream)
@@ -57,6 +58,7 @@ const Room = (props) => {
             })
 
             socketRef.current.on("user joined", payload => {
+                console.log("user joined")
                 const peer = addPeer(payload.signal, payload.callerID, stream);
                 peersRef.current.push({
                     peerID: payload.callerID,
@@ -74,6 +76,7 @@ const Room = (props) => {
     }, []);
 
     function createPeer(userToSignal, callerID, stream) {
+        console.log("createPeer")
         const peer = new Peer({
             initiator: true, 
             trickle: false,
@@ -88,6 +91,7 @@ const Room = (props) => {
     }
 
     function addPeer(incomingSignal, callerID, stream) {
+        console.log("addPeer")
         const peer = new Peer({
             initiator: false,
             trickle: false,

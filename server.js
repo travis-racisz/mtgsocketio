@@ -10,7 +10,9 @@ const users = {};
 
 const socketToRoom = {};
 
+
 io.on('connection', socket => {
+    console.log("connected")
     socket.on("join room", roomID => {
         console.log("joined room")
         if (users[roomID]) {
@@ -28,13 +30,16 @@ io.on('connection', socket => {
         const usersInThisRoom = users[roomID].filter(id => id !== socket.id);
 
         socket.emit("all users", usersInThisRoom);
+        console.log(usersInThisRoom)
     });
 
     socket.on("sending signal", payload => {
+        console.log("sending signal")
         io.to(payload.userToSignal).emit('user joined', { signal: payload.signal, callerID: payload.callerID });
     });
 
     socket.on("returning signal", payload => {
+        console.log("returning signal")
         io.to(payload.callerID).emit('receiving returned signal', { signal: payload.signal, id: socket.id });
     });
 
@@ -59,4 +64,4 @@ if (process.env.NODE_ENV === 'production') {
     })
 }
 
-app.listen(process.env.PORT || 8000, () => console.log(`server is running on port ${process.env.PORT}`))
+server.listen(process.env.PORT || 8000, () => console.log(`server is running on port ${process.env.PORT}`))

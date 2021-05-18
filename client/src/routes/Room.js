@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import io from "socket.io-client";
 import Peer from "simple-peer";
-import styled from "styled-components";
 import Mtgconfig from '../mtgsearch/Mtgconfig.js'
 import "../CSS/room.css"
 
@@ -39,9 +38,7 @@ const Room = (props) => {
         navigator.mediaDevices.getUserMedia({ video: videoConstraints, audio: true }).then(stream => {
             userVideo.current.srcObject = stream;
             socketRef.current.emit("join room", roomID)
-            console.log('joined room')
             socketRef.current.on("all users", users => {
-                console.log(users)
                 const peers = []
                 users.forEach(userID => {
                     const peer = createPeer(userID, socketRef.current.id, stream)
@@ -55,7 +52,6 @@ const Room = (props) => {
             })
 
             socketRef.current.on("user joined", payload => {
-                console.log("user joined")
                 const peer = addPeer(payload.signal, payload.callerID, stream);
                 peersRef.current.push({
                     peerID: payload.callerID,
@@ -73,7 +69,6 @@ const Room = (props) => {
     }, []);
 
     function createPeer(userToSignal, callerID, stream) {
-        console.log("createPeer")
         const peer = new Peer({
             initiator: true, 
             trickle: false,
@@ -88,7 +83,6 @@ const Room = (props) => {
     }
 
     function addPeer(incomingSignal, callerID, stream) {
-        console.log("addPeer")
         const peer = new Peer({
             initiator: false,
             trickle: false,

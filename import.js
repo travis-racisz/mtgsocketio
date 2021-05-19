@@ -7,7 +7,7 @@ admin.initializeApp({
   credential: admin.credential.cert(serviceAccount)
 });
 const db = admin.firestore();
-const collection = require("./AllPrintings.json")
+
 
 // function dbCollection(keys, card, a, card_num_in_set){ 
 //   // keys == list of set names 
@@ -48,6 +48,25 @@ const collection = require("./AllPrintings.json")
     }
 */
 
+
+// async function getCards(){ 
+//   const cardRef = db.collection('card_collection');
+//   const snapshot = await cardRef.orderBy("ab")
+//     .startAt("ab")
+//     .endAt("ab + '\uf8fff'")
+
+//     .get();
+//   if (snapshot.empty) {
+//     console.log('No matching documents.');
+//     return;
+//   }  
+  
+//   snapshot.forEach(doc => {
+//     console.log(doc.id, '=>', doc.data());
+//   });
+// }
+
+// getCards()
 
 let counter = 394; 
 let cardCounter = 0

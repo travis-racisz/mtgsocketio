@@ -4,7 +4,9 @@ const http = require("http");
 const app = express();
 const server = http.createServer(app);
 const socket = require("socket.io");
+const axios = require('axios')
 const io = socket(server);
+
 
 const users = {};
 
@@ -12,14 +14,11 @@ const socketToRoom = {};
 
 
 io.on('connection', socket => {
-    console.log("connected")
     socket.on("join room", roomID => {
-        console.log("joined room")
         if (users[roomID]) {
             const length = users[roomID].length;
             if (length === 4) {
                 socket.emit("room full");
-                console.log("room full")
                 return;
             }
             users[roomID].push(socket.id);
@@ -30,16 +29,13 @@ io.on('connection', socket => {
         const usersInThisRoom = users[roomID].filter(id => id !== socket.id);
 
         socket.emit("all users", usersInThisRoom);
-        console.log(usersInThisRoom)
     });
 
     socket.on("sending signal", payload => {
-        console.log("sending signal")
         io.to(payload.userToSignal).emit('user joined', { signal: payload.signal, callerID: payload.callerID });
     });
 
     socket.on("returning signal", payload => {
-        console.log("returning signal")
         io.to(payload.callerID).emit('receiving returned signal', { signal: payload.signal, id: socket.id });
     });
 
@@ -52,7 +48,21 @@ io.on('connection', socket => {
         }
     });
 
+    socket.on("search", input => { 
+        console.log(input)
+        io.emit("cards", ("butts"))
+        //    axios.get(`https://api.magicthegathering.io/v1/cards?name=${input}`)
+        //         .then(res => { 
+        //            const filtered = res.data.cards.filter(card => card.imageUrl ? card : null)
+        //            io.emit("cards", filtered)
+        //         })
+        //         .catch(err => console.log(err))
+                
+    
+    })
+
 });
+
 if (process.env.NODE_ENV === 'production') {
     // Exprees will serve up production assets
     app.use(express.static('client/build'));

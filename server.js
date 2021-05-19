@@ -10,11 +10,42 @@ const users = {};
 
 const socketToRoom = {};
 
+const { Client } = require('@elastic/elasticsearch')
+const elasticSearch = new Client({node: 'http://localhost:9200'})
+
+async function info(socket, message, roomID){
+    await elasticSearch.index({
+        index: 'log',
+        // type: '_doc', // uncomment this line if you are using Elasticsearch ≤ 6
+        body: {
+            type: 'info',
+            message: message,
+            roomID: roomID,
+            owner: socket.id
+        }
+    })
+    console.log("run")
+}
+
+async function warm(socket, message, roomID){
+    await elasticSearch.index({
+        index: 'warn',
+        // type: '_doc', // uncomment this line if you are using Elasticsearch ≤ 6
+        body: {
+            type: 'warn',
+            message: message,
+            roomID: roomID,
+            owner: socket.id
+        }
+    })
+    console.log("run")
+}
 
 io.on('connection', socket => {
     console.log("connected")
     socket.on("join room", roomID => {
         console.log("joined room")
+        info(socket, "Join Room",roomID)
         if (users[roomID]) {
             const length = users[roomID].length;
             if (length === 4) {

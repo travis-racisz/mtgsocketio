@@ -1,0 +1,14 @@
+#create_room{
+    display: flex;
+    flex-direction: column;
+    width: auto;
+    max-width: 200px;
+    margin: auto;
+    text-align: center;
+}
+
+#create_room > button{
+    height: auto;
+    font-size: 24px;
+
+}
